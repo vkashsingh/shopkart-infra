@@ -1,0 +1,14 @@
+# Region for AWS infrastructure
+region = "ap-southeast-2"
+
+# Kubernetes version
+kubernetes_version = "1.36"
+
+# CIDR blocks allowed to access the EKS cluster public API endpoint (e.g., your laptop IP /32 or office CIDR)
+admin_cidrs = [
+  "203.0.113.50/32"
+]
+
+# IAM role or user ARN to grant AmazonEKSClusterAdminPolicy (e.g., Jenkins/master EC2 IAM role or user)
+extra_admin_arn = "arn:aws:iam::123456789012:role/shopkart-jenkins-master-role"
+
