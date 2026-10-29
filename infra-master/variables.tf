@@ -23,6 +23,6 @@ variable "public_key_path" {
 variable "instance_type" {
   description = "EC2 instance type for the master machine"
   type        = string
-  default     = "t3.large"
+  default     = "m7i-flex.large"
 }
 
