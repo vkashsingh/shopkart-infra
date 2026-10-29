@@ -80,9 +80,9 @@ chmod +x /usr/local/bin/kubectl
 
 # 7. Helm
 echo "Installing Helm..."
-curl -fsSL https://baltocdn.com/helm/signing.asc | gpg --dearmor -o /etc/apt/keyrings/helm.gpg
+curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor -o /etc/apt/keyrings/helm.gpg
 chmod a+r /etc/apt/keyrings/helm.gpg
-echo "deb [signed-by=/etc/apt/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm.list > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | tee /etc/apt/sources.list.d/helm.list > /dev/null
 
 apt-get update -y
 apt-get install -y helm
