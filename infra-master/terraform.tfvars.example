@@ -1,0 +1,12 @@
+# Your public IP address in CIDR notation (required)
+my_ip = "203.0.113.50/32"
+
+# AWS Region (default: ap-southeast-2)
+aws_region = "ap-southeast-2"
+
+# SSH public key path (default: ~/.ssh/shopkart-master.pub)
+public_key_path = "~/.ssh/shopkart-master.pub"
+
+# EC2 instance type (default: t3.large)
+instance_type = "t3.large"
+
