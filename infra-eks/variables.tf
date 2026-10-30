@@ -13,7 +13,7 @@ variable "region" {
 variable "kubernetes_version" {
   description = "Kubernetes control plane and worker node version"
   type        = string
-  default     = "1.36"
+  default     = "1.37"
 }
 
 variable "admin_cidrs" {
