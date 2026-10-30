@@ -5,7 +5,7 @@
 ##
 
 # EKS cluster module: manages the Kubernetes control plane, worker node groups, and essential add-ons.
-# Links to module.vpc for subnets/VPC and module.ebs_csi_irsa for storage driver IAM authentication.
+# Links to module.vpc for subnets/VPC and aws_iam_role.ebs_csi (Pod Identity) for the EBS CSI driver.
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
@@ -37,7 +37,7 @@ module "eks" {
     }
   }
 
-  enable_irsa = true
+  enable_irsa = false
 
   eks_managed_node_groups = {
     default = {
@@ -63,6 +63,10 @@ module "eks" {
   }
 
   addons = {
+    eks-pod-identity-agent = {
+      most_recent    = true
+      before_compute = true
+    }
     vpc-cni = {
       most_recent    = true
       before_compute = true
@@ -74,8 +78,11 @@ module "eks" {
       most_recent = true
     }
     aws-ebs-csi-driver = {
-      most_recent              = true
-      service_account_role_arn = module.ebs_csi_irsa.arn
+      most_recent = true
+      pod_identity_association = [{
+        role_arn        = aws_iam_role.ebs_csi.arn
+        service_account = "ebs-csi-controller-sa"
+      }]
     }
   }
 }

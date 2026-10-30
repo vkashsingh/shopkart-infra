@@ -1,25 +1,27 @@
 ##
-# IAM Roles & Service Account Policies (IRSA)
-# Provisions the IAM Role for Service Accounts (IRSA) allowing the AWS EBS CSI
-# driver controller pod to dynamically provision and manage EBS persistent volumes.
+# IAM for EKS Pod Identity
+# The EBS CSI driver needs AWS permissions to create and attach EBS volumes for PVCs.
+# Pod Identity is used instead of IRSA because this account's SCP blocks creating
+# IAM OIDC providers. Pod Identity needs no OIDC provider.
 ##
 
-# EBS CSI IRSA role: creates an IAM role assumed via OIDC web identity by the ebs-csi-controller service account.
-# Attaches AmazonEBSCSIDriverPolicy and binds to module.eks.oidc_provider_arn for the aws-ebs-csi-driver addon.
-module "ebs_csi_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "~> 6.0"
+# IAM role assumed by the EBS CSI controller pod through EKS Pod Identity.
+# Trusted by pods.eks.amazonaws.com; linked to the pod via the add-on's pod_identity_association in compute.tf.
+resource "aws_iam_role" "ebs_csi" {
+  name = "shopkart-ebs-csi-pod-identity"
 
-  name = "shopkart-ebs-csi"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "pods.eks.amazonaws.com" }
+      Action    = ["sts:AssumeRole", "sts:TagSession"]
+    }]
+  })
+}
 
-  policies = {
-    AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-  }
-
-  oidc_providers = {
-    eks = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
-    }
-  }
+# AWS-managed policy with the EC2 permissions the EBS CSI driver needs (create, attach, delete volumes).
+resource "aws_iam_role_policy_attachment" "ebs_csi" {
+  role       = aws_iam_role.ebs_csi.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
 }
