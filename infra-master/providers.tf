@@ -1,13 +1,8 @@
-terraform {
-  required_version = ">= 1.5.0"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.0"
-    }
-  }
-}
+##
+# AWS Provider Configuration
+# Configures the AWS provider instance, target deployment region, and global
+# default resource tags applied to all master infrastructure resources.
+##
 
 provider "aws" {
   region = var.aws_region
@@ -18,4 +13,3 @@ provider "aws" {
     }
   }
 }
-

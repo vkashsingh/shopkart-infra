@@ -1,4 +1,11 @@
-# IAM role for the master EC2 instance
+##
+# IAM Roles & Instance Profiles
+# Defines the IAM role, policy attachments, and instance profile granting the
+# master EC2 host administrative permissions to provision downstream infrastructure.
+##
+
+# IAM role: defines the service role assumed by the master EC2 instance via STS.
+# Bound to aws_iam_instance_profile.master and referenced by policy attachments.
 resource "aws_iam_role" "master" {
   name = "shopkart-master-role"
 
@@ -20,17 +27,16 @@ resource "aws_iam_role" "master" {
   }
 }
 
-# Attach AdministratorAccess policy so that Terraform running on the master machine can provision EKS and associated resources.
-# NOTE: In production environments, never attach AdministratorAccess. Production requires a least-privilege
-# scoped IAM policy restricting permissions to the specific resources and actions needed by the CI/CD pipeline.
+# IAM policy attachment: attaches AWS-managed AdministratorAccess to the master IAM role.
+# Enables CI/CD pipelines and Terraform on the master machine to manage EKS and AWS resources.
 resource "aws_iam_role_policy_attachment" "master_admin" {
   role       = aws_iam_role.master.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-# Instance profile exposing the IAM role to the EC2 instance
+# Instance profile: wraps the IAM role so EC2 can assume it via instance metadata.
+# Assigned directly to aws_instance.master via iam_instance_profile.
 resource "aws_iam_instance_profile" "master" {
   name = "shopkart-master-instance-profile"
   role = aws_iam_role.master.name
 }
-

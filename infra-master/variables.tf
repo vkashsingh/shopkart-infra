@@ -1,11 +1,17 @@
+##
+# Input Variables
+# Declares configurable parameters including AWS region, authorized administrator
+# IP CIDR, SSH public key path, and EC2 instance type for the master machine.
+##
+
 variable "aws_region" {
-  description = "AWS region for resources"
+  description = "AWS region where the master machine and associated resources are deployed"
   type        = string
   default     = "ap-southeast-2"
 }
 
 variable "my_ip" {
-  description = "CIDR block allowed for SSH, Jenkins, and SonarQube access (e.g. 203.0.113.50/32)"
+  description = "IPv4 CIDR block authorized for SSH (22), Jenkins (8080), and SonarQube (9000) access (e.g., 203.0.113.50/32)"
   type        = string
 
   validation {
@@ -15,14 +21,13 @@ variable "my_ip" {
 }
 
 variable "public_key_path" {
-  description = "Path to the SSH public key file for the master instance"
+  description = "File path to the OpenSSH public key file imported for EC2 SSH access"
   type        = string
   default     = "~/.ssh/shopkart-master.pub"
 }
 
 variable "instance_type" {
-  description = "EC2 instance type for the master machine"
+  description = "EC2 instance type used for the master CI/CD and tooling host"
   type        = string
   default     = "m7i-flex.large"
 }
-
