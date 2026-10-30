@@ -1,8 +1,5 @@
-##
-# Input Variables
-# Declares configurable parameters including AWS region, authorized administrator
-# IP CIDR, SSH public key path, and EC2 instance type for the master machine.
-##
+# Input variables for infra-master.
+# Declares deployment region, administrator CIDR, SSH key path, and instance type.
 
 variable "aws_region" {
   description = "AWS region where the master machine and associated resources are deployed"
@@ -11,7 +8,7 @@ variable "aws_region" {
 }
 
 variable "my_ip" {
-  description = "IPv4 CIDR block authorized for SSH (22), Jenkins (8080), and SonarQube (9000) access (e.g., 203.0.113.50/32)"
+  description = "IPv4 CIDR block authorized for SSH (22), Jenkins (8080), and SonarQube (9000) access (e.g. 203.0.113.50/32)"
   type        = string
 
   validation {

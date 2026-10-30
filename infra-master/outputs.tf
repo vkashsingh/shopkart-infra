@@ -1,8 +1,5 @@
-##
-# Outputs
-# Exposes connection strings, web application URLs, and public network endpoints
-# for connecting to and interacting with the master CI/CD machine.
-##
+# Output values for the master machine.
+# Exposes the EC2 public IP, SSH command, Jenkins URL, and SonarQube URL.
 
 output "public_ip" {
   description = "Public IPv4 address of the master EC2 instance"

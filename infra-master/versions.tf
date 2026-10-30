@@ -1,8 +1,5 @@
-##
-# Terraform & Provider Version Constraints
-# Defines the required Terraform core engine version and AWS provider plugin
-# requirements for provisioning the ShopKart master machine infrastructure.
-##
+# Terraform core and provider version requirements.
+# Pins the minimum required Terraform version and AWS provider for infra-master.
 
 terraform {
   required_version = ">= 1.5.0"
@@ -14,4 +11,3 @@ terraform {
     }
   }
 }
-

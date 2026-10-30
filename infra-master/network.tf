@@ -1,18 +1,15 @@
-##
-# Network & Access Control Resources
-# Provisions the EC2 SSH key pair and security group rules controlling inbound
-# network traffic from the administrator's authorized IP address.
-##
+# Network and access control resources for the master instance.
+# Manages the EC2 SSH key pair and security group rules for Jenkins and SonarQube.
 
-# Key pair: imports developer public SSH key into EC2 for secure SSH authentication.
-# Referenced by aws_instance.master to allow remote shell access.
+# Key pair: imports developer public SSH key into AWS EC2.
+# Used by aws_instance.master to authenticate SSH login sessions.
 resource "aws_key_pair" "master" {
   key_name   = "shopkart-master"
   public_key = file(pathexpand(var.public_key_path))
 }
 
-# Security group: restricts ingress on SSH, Jenkins, and SonarQube ports to var.my_ip.
-# Attached directly to aws_instance.master and bound to data.aws_vpc.default.
+# Security group: firewall restricting SSH, Jenkins, and SonarQube ingress to var.my_ip.
+# Placed in data.aws_vpc.default and attached to aws_instance.master.
 resource "aws_security_group" "master" {
   name        = "shopkart-master-sg"
   description = "Security group for ShopKart DevOps master machine"
@@ -54,4 +51,3 @@ resource "aws_security_group" "master" {
     Name = "shopkart-master-sg"
   }
 }
-

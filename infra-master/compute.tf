@@ -1,11 +1,8 @@
-##
-# Compute Resources
-# Deploys the master EC2 instance configured with IMDSv2, an encrypted gp3 root
-# volume, and an automated user-data bootstrap script for CI/CD tooling.
-##
+# Compute resources for the ShopKart master machine.
+# Deploys the Ubuntu 24.04 EC2 instance running Jenkins, SonarQube, and CI/CD tools.
 
-# EC2 instance: deploys the master host running Jenkins, SonarQube, Docker, and CLIs.
-# Connects data.aws_ami, data.aws_subnets, aws_key_pair, aws_iam_instance_profile, and aws_security_group.
+# EC2 instance: provisions the Ubuntu 24.04 master host running CI/CD tooling.
+# Uses data.aws_ami, data.aws_subnets, aws_key_pair, aws_security_group, and aws_iam_instance_profile.
 resource "aws_instance" "master" {
   ami                  = data.aws_ami.ubuntu_24_04.id
   instance_type        = var.instance_type
@@ -41,4 +38,3 @@ resource "aws_instance" "master" {
     Name = "shopkart-master"
   }
 }
-
